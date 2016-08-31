@@ -1,7 +1,7 @@
 'use strict'
 
 const cheerio = require('cheerio');
-const camelCase = require('camelcase');
+const minify = require('html-minifier').minify;
 
 class TableOfContentsJSON {
     constructor() {
@@ -12,10 +12,9 @@ class TableOfContentsJSON {
      *
      * @public
      * @param {string} html
-     * @param {array}
      * @return {array}
      */
-    generate (html) {
+    generateJSON (html) {
         if (!html || typeof html !== 'string') {
             throw new TypeError('html should be set and must be a string');
         }
@@ -35,7 +34,7 @@ class TableOfContentsJSON {
         let tree = [];
 
         for (let i = 0; i < list.length; i++) {
-            list[i].children = this.getChildren(list, list[i]);
+            list[i].children = this.getChildrenJSON(list, list[i]);
 
             if (list[i].type === 'h1') {
                 tree.push(list[i]);
@@ -53,7 +52,7 @@ class TableOfContentsJSON {
      * @param {object} node
      * @return {array}
      */
-    getChildren (list, node) {
+    getChildrenJSON (list, node) {
         let children = [];
         let nodeHeaderSize = parseInt(node.type.charAt(1));
 
@@ -72,6 +71,71 @@ class TableOfContentsJSON {
         }
 
         return children;
+    }
+
+
+    /**
+     * Generate a table of contents in HTML based on a JSON structure
+     *
+     * @public
+     * @param {array} json
+     * @return {string}
+     */
+    generateHTML (json) {
+        if (!json || !(json instanceof Array)) {
+            throw new TypeError('json should be set and must be an array');
+        }
+
+        let html = `
+            <html>
+              <head>
+                <style> #toc li,ol,ul { list-style: none; } </style>
+              </head>
+              <body>
+                <ol id="toc"></ol>
+              </body>
+            </html>
+        `;
+        let $result = cheerio.load(html);
+
+        for (let i = 0; i < json.length; i++) {
+            let node = json[i];
+            let $li = cheerio.load(`<li>${node.name}</li>`)('li');
+
+            if (node.children.length) {
+                this.addChildrenHTML($li, node.children);
+            }
+
+            $result('#toc').append($li);
+        }
+
+        return minify($result.html(), {
+            collapseWhitespace: true
+        });
+    }
+
+    /**
+     * Add children to an element
+     *
+     * @protected
+     * @param {object} $element
+     * @param {array} children
+     * @return {object}
+     */
+    addChildrenHTML ($element, children) {
+        let $ol = cheerio.load(`<ol></ol>`)('ol');
+
+        for (let i = 0; i < children.length; i++) {
+            let node = children[i];
+            let $li = cheerio.load(`<li>${node.name}</li>`)('li');
+            $ol.append($li);
+
+            if (node.children.length) {
+                this.addChildrenHTML($li, node.children);
+            }
+        }
+
+        $element.append($ol);
     }
 }
 

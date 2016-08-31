@@ -18,7 +18,8 @@
   "homepage": "https://github.com/legalthings/table-of-contents-json#readme",
   "dependencies": {
     "camelcase": "^3.0.0",
-    "cheerio": "^0.22.0"
+    "cheerio": "^0.22.0",
+    "html-minifier": "^3.0.2"
   },
   "devDependencies": {
     "chai": "^3.5.0",

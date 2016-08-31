@@ -2,19 +2,26 @@
 
 const assert = require('assert');
 const chai = require('chai');
+const minify = require('html-minifier').minify;
 const TOC = require('../../../src/table-of-contents-json.js');
 const toc = new TOC();
 const htmlDocuments = require('../../data/documents/html');
+const jsonDocuments = require('../../data/documents/json');
 
 describe('TableOfContentsJSON', () => {
-    describe('#generate()', () => {
-        it('should generate a nested JSON TOC structure', testGenerateNestedStructure);
-        it('should throw exception if invalid html is given', tesGenerateInvalidTypeException);
+    describe('#generateJSON()', () => {
+        it('should generate a JSON TOC structure', testGenerateJSONStructure);
+        it('should throw exception if invalid html is given', testGenerateInvalidHtmlException);
+    });
+
+    describe('#generateHTML()', () => {
+        it('should generate a html TOC structure', testGenerateHTMLStructure);
+        it('should throw exception if invalid json is given', testGenerateInvalidJsonException);
     });
 });
 
-function testGenerateNestedStructure () {
-    chai.expect(toc.generate(htmlDocuments[0])).to.deep.equal([
+function testGenerateJSONStructure () {
+    chai.expect(toc.generateJSON(htmlDocuments[0])).to.deep.equal([
         {
             "id": 0,
             "name": "Paragraph 1",
@@ -57,6 +64,46 @@ function testGenerateNestedStructure () {
     ]);
 }
 
-function tesGenerateInvalidTypeException () {
-    chai.expect(() => toc.generate(15)).to.throw('html should be set and must be a string');
+function testGenerateInvalidHtmlException () {
+    chai.expect(() => toc.generateJSON(15)).to.throw('html should be set and must be a string');
+}
+
+function testGenerateHTMLStructure () {
+    assert.equal(toc.generateHTML(jsonDocuments), minify(`
+        <html>
+          <head>
+            <style>
+              #toc li,ol,ul { list-style: none; }
+            </style>
+          </head>
+          <body>
+          <ol id="toc">
+            <li>
+              Paragraph 1
+              <ol>
+                <li>Paragraph 1.1</li>
+              </ol>
+            </li>
+            <li>
+              Paragraph 2
+              <ol>
+                <li>Paragraph 2.1</li>
+                <li>
+                  Paragraph 2.2
+                  <ol>
+                    <li>Paragraph 2.2.1</li>
+                  </ol>
+                </li>
+              </ol>
+            </li>
+          </ol>
+          </body>
+        </html>
+    `, {
+        collapseWhitespace: true
+    }));
+}
+
+function testGenerateInvalidJsonException () {
+    chai.expect(() => toc.generateJSON()).to.throw('html should be set and must be a string');
 }
