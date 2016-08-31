@@ -1,0 +1,27 @@
+{
+  "name": "table-of-contents-json",
+  "version": "1.0.0",
+  "description": "Generate a table of contents represented in a JSON structure based on HTML",
+  "main": "src/table-of-contents-json.js",
+  "scripts": {
+    "test": "node ./node_modules/mocha/bin/mocha ./tests/**/index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/legalthings/table-of-contents-json.git"
+  },
+  "author": "LegalThings",
+  "license": "UNLICENSED",
+  "bugs": {
+    "url": "https://github.com/legalthings/table-of-contents-json/issues"
+  },
+  "homepage": "https://github.com/legalthings/table-of-contents-json#readme",
+  "dependencies": {
+    "camelcase": "^3.0.0",
+    "cheerio": "^0.22.0"
+  },
+  "devDependencies": {
+    "chai": "^3.5.0",
+    "mocha": "^3.0.2"
+  }
+}
