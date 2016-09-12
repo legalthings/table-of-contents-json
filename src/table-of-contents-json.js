@@ -79,24 +79,18 @@ class TableOfContentsJSON {
      *
      * @public
      * @param {array} json
+     * @param {string} base The base html file in which the toc should be embedded.
+                            The toc will be placed at a [ table of contents ] placeholder
      * @return {string}
      */
-    generateHTML (json) {
+    generateHTML (json, base) {
         if (!json || !(json instanceof Array)) {
             throw new TypeError('json should be set and must be an array');
         }
 
-        let html = `
-            <html>
-              <head>
-                <style> #toc li,ol,ul { list-style: none; } </style>
-              </head>
-              <body>
-                <ol id="toc"></ol>
-              </body>
-            </html>
-        `;
-        let $result = cheerio.load(html);
+        let html = base || '<html><head></head><body>[ table of contents ]</body></html>';
+        let $ol = cheerio.load('<ol id="toc"></ol>');
+        let style = '<style>#toc li,ol,ul { list-style: none; }</style>';
 
         for (let i = 0; i < json.length; i++) {
             let node = json[i];
@@ -106,10 +100,15 @@ class TableOfContentsJSON {
                 this.addChildrenHTML($li, node.children);
             }
 
-            $result('#toc').append($li);
+            $ol('#toc').append($li);
         }
 
-        return minify($result.html(), {
+        let $html = cheerio.load(html);
+        $html('head').append(style);
+        let result = $html.html();
+        result = result.replace(/\[ table of contents \]/, $ol.html());
+
+        return minify(result, {
             collapseWhitespace: true
         });
     }

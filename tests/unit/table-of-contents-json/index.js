@@ -16,12 +16,13 @@ describe('TableOfContentsJSON', () => {
 
     describe('#generateHTML()', () => {
         it('should generate a html TOC structure', testGenerateHTMLStructure);
+        it('should generate a html TOC structure and put it in a base html', testGenerateHTMLStructureWithBase);
         it('should throw exception if invalid json is given', testGenerateInvalidJsonException);
     });
 });
 
 function testGenerateJSONStructure () {
-    chai.expect(toc.generateJSON(htmlDocuments[0])).to.deep.equal([
+    chai.expect(toc.generateJSON(htmlDocuments)).to.deep.equal([
         {
             "id": 0,
             "name": "Paragraph 1",
@@ -77,26 +78,66 @@ function testGenerateHTMLStructure () {
             </style>
           </head>
           <body>
-          <ol id="toc">
-            <li>
-              Paragraph 1
-              <ol>
-                <li>Paragraph 1.1</li>
-              </ol>
-            </li>
-            <li>
-              Paragraph 2
-              <ol>
-                <li>Paragraph 2.1</li>
+            <ol id="toc">
+              <li>
+                Paragraph 1
+                <ol>
+                  <li>Paragraph 1.1</li>
+                </ol>
+              </li>
+              <li>
+                Paragraph 2
+                <ol>
+                  <li>Paragraph 2.1</li>
+                  <li>
+                    Paragraph 2.2
+                    <ol>
+                      <li>Paragraph 2.2.1</li>
+                    </ol>
+                  </li>
+                </ol>
+              </li>
+            </ol>
+          </body>
+        </html>
+    `, {
+        collapseWhitespace: true
+    }));
+}
+
+function testGenerateHTMLStructureWithBase () {
+    let base = '<html><head><foo></foo><body><div>[ table of contents ]</div></body></head></html>';
+    assert.equal(toc.generateHTML(jsonDocuments, base), minify(`
+        <html>
+          <head>
+            <foo></foo>
+            <style>
+              #toc li,ol,ul { list-style: none; }
+            </style>
+          </head>
+          <body>
+            <div>
+              <ol id="toc">
                 <li>
-                  Paragraph 2.2
+                  Paragraph 1
                   <ol>
-                    <li>Paragraph 2.2.1</li>
+                    <li>Paragraph 1.1</li>
+                  </ol>
+                </li>
+                <li>
+                  Paragraph 2
+                  <ol>
+                    <li>Paragraph 2.1</li>
+                    <li>
+                      Paragraph 2.2
+                      <ol>
+                        <li>Paragraph 2.2.1</li>
+                      </ol>
+                    </li>
                   </ol>
                 </li>
               </ol>
-            </li>
-          </ol>
+            </div>
           </body>
         </html>
     `, {
