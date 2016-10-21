@@ -10,6 +10,7 @@ const html = `
       <h2>Paragraph 2.1</h2>
       <h2>Paragraph 2.2</h2>
       <h3>Paragraph 2.2.1</h3>
+      <h4></h4>
     </body>
   </html>
 `;

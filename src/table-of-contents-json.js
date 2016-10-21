@@ -24,11 +24,13 @@ class TableOfContentsJSON {
         let list = [];
 
         for (let i = 0; i < $headers.length; i++) {
-            let name =  $headers[i].children[0].data;
-            let type = $headers[i].name;
-            let headerSize = type.charAt(1);
-            let node = { id: i, name: name, type: type, children: [] };
-            list.push(node);
+            if ($headers[i].children.length > 0) {
+                let name = $headers[i].children[0].data;
+                let type = $headers[i].name;
+                let headerSize = type.charAt(1);
+                let node = {id: i, name: name, type: type, children: []};
+                list.push(node);
+            }
         }
 
         let tree = [];
