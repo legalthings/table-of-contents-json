@@ -5,6 +5,9 @@ const minify = require('html-minifier').minify;
 
 class TableOfContentsJSON {
     constructor() {
+        this.defaultOptions = {
+            skipHeader: 0
+        }
     }
 
     /**
@@ -14,16 +17,18 @@ class TableOfContentsJSON {
      * @param {string} html
      * @return {array}
      */
-    generateJSON (html) {
+    generateJSON (html, options) {
         if (!html || typeof html !== 'string') {
             throw new TypeError('html should be set and must be a string');
         }
+
+        this.options = Object.assign(this.defaultOptions, options);
 
         let $ = cheerio.load(html);
         let $headers = $(':header');
         let list = [];
 
-        for (let i = 0; i < $headers.length; i++) {
+        for (let i = this.options.skipHeader; i < $headers.length; i++) {
             if ($headers[i].children.length > 0) {
                 let name = $headers[i].children[0].data;
                 let type = $headers[i].name;
@@ -85,10 +90,12 @@ class TableOfContentsJSON {
                             The toc will be placed at a [ table of contents ] placeholder
      * @return {string}
      */
-    generateHTML (json, base) {
+    generateHTML (json, base, options) {
         if (!json || !(json instanceof Array)) {
             throw new TypeError('json should be set and must be an array');
         }
+
+        this.options = Object.assign(this.defaultOptions, options);
 
         let html = base || '<html><head></head><body>[ table of contents ]</body></html>';
         let $ol = cheerio.load('<ol id="toc"></ol>');
@@ -105,10 +112,15 @@ class TableOfContentsJSON {
             $ol('#toc').append($li);
         }
 
+        let toc = $ol.html();;
+        if (this.options.tocHeader) {
+            toc = `<h1>${options.tocHeader}</h1>${toc}`;
+        }
+
         let $html = cheerio.load(html);
         $html('head').append(style);
         let result = $html.html();
-        result = result.replace(/\[ table of contents \]/, $ol.html());
+        result = result.replace(/\[ table of contents \]/, toc);
 
         return minify(result, {
             collapseWhitespace: true

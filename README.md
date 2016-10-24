@@ -19,6 +19,16 @@ Based on the returned JSON format you can generate a table of contents in HTML.
 The TOC is generated based on the headers in the html file that was given. Nesting is supported.
 
 **HTML page to JSON table of contents** 
+
+### Params
+
+Generate takes 2 parameters: `html` and `options`
+
+- `html`: html from which the toc is generated
+- `options`: object with options.
+    - `skipHeader`: integer with number of header to skip
+
+
 ```javascript
 const TOC = require('table-of-contents-json');
 const toc = new TOC;
@@ -78,7 +88,17 @@ output:
 */
 ```
 
-**JSON to HTML table of contents** 
+**JSON to HTML table of contents**
+ 
+ ### Params
+ 
+ Generate takes 2 parameters: `html` and `options`
+ 
+ - `html`: html from which the toc is generated
+ - `base`: html where toc is placed into
+ - `options`: object with options.
+     - `tocHeader`: Header which is added to the table of contents
+
 ```javascript
 const TOC = require('table-of-contents-json');
 const toc = new TOC;
