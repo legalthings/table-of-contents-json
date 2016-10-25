@@ -22,7 +22,7 @@ class TableOfContentsJSON {
             throw new TypeError('html should be set and must be a string');
         }
 
-        this.options = Object.assign(this.defaultOptions, options);
+        this.options = Object.assign({}, this.defaultOptions, options);
 
         let $ = cheerio.load(html);
         let $headers = $(':header');
@@ -95,7 +95,7 @@ class TableOfContentsJSON {
             throw new TypeError('json should be set and must be an array');
         }
 
-        this.options = Object.assign(this.defaultOptions, options);
+        this.options = Object.assign({}, this.defaultOptions, options);
 
         let html = base || '<html><head></head><body>[ table of contents ]</body></html>';
         let $ol = cheerio.load('<ol id="toc"></ol>');
