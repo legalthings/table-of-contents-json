@@ -1,6 +1,6 @@
 {
   "name": "table-of-contents-json",
-  "version": "1.1.2",
+  "version": "1.1.3",
   "description": "Generate a table of contents represented in a JSON structure based on HTML",
   "main": "src/table-of-contents-json.js",
   "scripts": {
