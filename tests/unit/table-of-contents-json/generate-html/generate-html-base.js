@@ -3,10 +3,11 @@ const minify = require('html-minifier').minify;
 const TOC = require('../../../../src/table-of-contents-json.js');
 
 module.exports = () => {
-  const html =
+  const html = 
 `<html>
 
 <head>
+  <foo></foo>
   <style>
     #toc li,
     ol,
@@ -17,23 +18,25 @@ module.exports = () => {
 </head>
 
 <body>
-  <ol id="toc">
-    <li>Paragraph 1
-      <ol>
-        <li>Paragraph 1.1</li>
-      </ol>
-    </li>
-    <li>Paragraph 2
-      <ol>
-        <li>Paragraph 2.1</li>
-        <li>Paragraph 2.2
-          <ol>
-            <li>Paragraph 2.2.1</li>
-          </ol>
-        </li>
-      </ol>
-    </li>
-  </ol>
+  <div>
+    <ol id="toc">
+      <li>Paragraph 1
+        <ol>
+          <li>Paragraph 1.1</li>
+        </ol>
+      </li>
+      <li>Paragraph 2
+        <ol>
+          <li>Paragraph 2.1</li>
+          <li>Paragraph 2.2
+            <ol>
+              <li>Paragraph 2.2.1</li>
+            </ol>
+          </li>
+        </ol>
+      </li>
+    </ol>
+  </div>
 </body>
 
 </html>`;
@@ -80,8 +83,19 @@ module.exports = () => {
     }
   ];
 
+  const base = `
+    <html>
+      <head>
+        <foo></foo>
+      </head>
+      <body>
+        <div>[ table of contents ]</div>
+      </body>
+    </html>
+  `;
+
   const toc = new TOC();
-  const result = toc.generateHTML(json);
+  const result = toc.generateHTML(json, base);
 
   assert.equal(
     result,

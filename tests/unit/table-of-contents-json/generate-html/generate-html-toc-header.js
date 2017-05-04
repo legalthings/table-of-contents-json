@@ -3,41 +3,41 @@ const minify = require('html-minifier').minify;
 const TOC = require('../../../../src/table-of-contents-json.js');
 
 module.exports = () => {
-  const html = `
-    <html>
-      <head>
-        <foo></foo>
-        <style>
-          #toc li,ol,ul { list-style: none; }
-        </style>
-      </head>
-      <body>
-        <div>
-          <h1>Table of Contents</h1>
-          <ol id="toc">
-            <li>
-              Paragraph 1
-              <ol>
-                <li>Paragraph 1.1</li>
-              </ol>
-            </li>
-            <li>
-              Paragraph 2
-              <ol>
-                <li>Paragraph 2.1</li>
-                <li>
-                  Paragraph 2.2
-                  <ol>
-                    <li>Paragraph 2.2.1</li>
-                  </ol>
-                </li>
-              </ol>
-            </li>
+  const html = 
+`<html>
+
+<head>
+  <style>
+    #toc li,
+    ol,
+    ul {
+      list-style: none;
+    }
+  </style>
+</head>
+
+<body>
+  <h1>Table of Contents</h1>
+  <ol id="toc">
+    <li>Paragraph 1
+      <ol>
+        <li>Paragraph 1.1</li>
+      </ol>
+    </li>
+    <li>Paragraph 2
+      <ol>
+        <li>Paragraph 2.1</li>
+        <li>Paragraph 2.2
+          <ol>
+            <li>Paragraph 2.2.1</li>
           </ol>
-        </div>
-      </body>
-    </html>
-  `;
+        </li>
+      </ol>
+    </li>
+  </ol>
+</body>
+
+</html>`;
 
   const json = [
     {
@@ -81,19 +81,11 @@ module.exports = () => {
     }
   ];
 
-  const base = `
-    <html>
-      <head>
-        <foo></foo>
-      </head>
-      <body><div>[ table of contents ]</div></body>
-    </html>
-  `;
-
   const toc = new TOC();
+  const result = toc.generateHTML(json, null, {tocHeader: 'Table of Contents'});
 
   assert.equal(
-    toc.generateHTML(json, base, {tocHeader: 'Table of Contents'}),
-    minify(html, {collapseWhitespace: true})
+    result,
+    html
   );
 };

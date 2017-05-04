@@ -19,7 +19,8 @@
   "dependencies": {
     "camelcase": "^3.0.0",
     "cheerio": "^0.22.0",
-    "html-minifier": "^3.0.2"
+    "html-minifier": "^3.0.2",
+    "js-beautify": "^1.6.12"
   },
   "devDependencies": {
     "chai": "^3.5.0",

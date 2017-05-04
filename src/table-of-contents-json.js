@@ -1,7 +1,7 @@
 'use strict'
 
 const cheerio = require('cheerio');
-const minify = require('html-minifier').minify;
+const beautifyHtml = require('js-beautify').html;
 
 class TableOfContentsJSON {
     constructor() {
@@ -122,8 +122,8 @@ class TableOfContentsJSON {
         let result = $html.html();
         result = result.replace(/\[ table of contents \]/, toc);
 
-        return minify(result, {
-            collapseWhitespace: true
+        return beautifyHtml(result, {
+            indent_size: 2
         });
     }
 
