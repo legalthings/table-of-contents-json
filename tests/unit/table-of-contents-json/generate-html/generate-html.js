@@ -9,8 +9,8 @@ module.exports = () => {
 <head>
   <style>
     #toc li,
-    ol,
-    ul {
+    #toc ol,
+    #toc ul {
       list-style: none;
     }
   </style>

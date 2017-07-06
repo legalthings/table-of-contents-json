@@ -133,7 +133,7 @@ class TableOfContentsJSON {
 
         const html = base || '<html><head></head><body>[ table of contents ]</body></html>';
         const $ol = cheerio.load('<ol id="toc"></ol>');
-        const style = '<style>#toc li,ol,ul { list-style: none; }</style>';
+        const style = '<style>#toc li, #toc ol, #toc ul { list-style: none; }</style>';
 
         for (let i = 0; i < json.length; i++) {
             const node = json[i];
