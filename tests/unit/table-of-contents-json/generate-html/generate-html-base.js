@@ -19,23 +19,25 @@ module.exports = () => {
 
 <body>
   <div>
-    <ol id="toc">
-      <li>Paragraph 1
-        <ol>
-          <li>Paragraph 1.1</li>
-        </ol>
-      </li>
-      <li>Paragraph 2
-        <ol>
-          <li>Paragraph 2.1</li>
-          <li>Paragraph 2.2
-            <ol>
-              <li>Paragraph 2.2.1</li>
-            </ol>
-          </li>
-        </ol>
-      </li>
-    </ol>
+    <div id="toc">
+      <ol>
+        <li>Paragraph 1
+          <ol>
+            <li>Paragraph 1.1</li>
+          </ol>
+        </li>
+        <li>Paragraph 2
+          <ol>
+            <li>Paragraph 2.1</li>
+            <li>Paragraph 2.2
+              <ol>
+                <li>Paragraph 2.2.1</li>
+              </ol>
+            </li>
+          </ol>
+        </li>
+      </ol>
+    </div>
   </div>
 </body>
 

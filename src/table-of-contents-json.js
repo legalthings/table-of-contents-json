@@ -132,7 +132,7 @@ class TableOfContentsJSON {
         this.options = Object.assign({}, this.defaultOptions, options);
 
         const html = base || '<html><head></head><body>[ table of contents ]</body></html>';
-        const $ol = cheerio.load('<ol id="toc"></ol>');
+        const $toc = cheerio.load('<div id="toc"><ol></ol></div>');
         const style = '<style>#toc li, #toc ol, #toc ul { list-style: none; }</style>';
 
         for (let i = 0; i < json.length; i++) {
@@ -143,10 +143,10 @@ class TableOfContentsJSON {
                 this.addChildrenHTML($li, node.children);
             }
 
-            $ol('#toc').append($li);
+            $toc('#toc > ol').append($li);
         }
 
-        let toc = $ol.html();;
+        let toc = $toc.html();;
         if (this.options.tocHeader) {
             toc = `<h1>${options.tocHeader}</h1>${toc}`;
         }
